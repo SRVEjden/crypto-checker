@@ -1,8 +1,9 @@
 import React from 'react';
-
+import roundToThousandths from "@/lib/roundToThousandths";
 function CryptoTableRow({coin}) {
     let priceChangeColor;
     if (coin.price_change_24h > 0) priceChangeColor = 'text-green-500'
+    else if(!coin.price_change_24h) priceChangeColor = `text-white-500`
     else priceChangeColor = `text-red-500`
     return (
         <tr>
@@ -16,13 +17,13 @@ function CryptoTableRow({coin}) {
                 </div>
             </td>
             <td>
-                <span className="font-bold">{coin.symbol}</span>
+                <span className="font-bold">{coin.symbol.toUpperCase()}</span>
             </td>
             <td>{coin.name}</td>
             <td>{coin.market_cap}</td>
             <td>{coin.current_price}</td>
-            <td className={priceChangeColor}>{coin.price_change_24h}</td>
-            <td className={priceChangeColor}>{coin.price_change_percentage_24h}</td>
+            <td className={priceChangeColor}>{roundToThousandths(coin.price_change_24h ? coin.price_change_24h : 0)}</td>
+            <td className={priceChangeColor}>{coin.price_change_percentage_24h ? coin.price_change_percentage_24h : 0}%</td>
         </tr>
     );
 }
