@@ -1,12 +1,11 @@
 import React from 'react';
 import "./dashboard.scss"
+import CryptoTable from "@/app/dashboard/components/CryptoTable";
 
 function Page(props) {
     return (
         <div>
-            <button className="btn btn-primary">One</button>
-            <button className="btn btn-secondary">Two</button>
-            <button className="btn btn-accent btn-outline">Three</button>
+            <CryptoTable/>
         </div>
     );
 }

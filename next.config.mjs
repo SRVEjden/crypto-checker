@@ -1,4 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    sassOptions: {
+        prependData:
+    `
+        @import "tailwindcss";
+        @plugin "daisyui" {
+          themes: all;
+        }; 
+    `
+    }
+};
 
 export default nextConfig;
