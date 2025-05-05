@@ -4,10 +4,10 @@ import { useEffect, useRef, useCallback } from 'react';
  * useWebsocket hook
  * @param {string} url - WebSocket URL
  * @returns {{
+ *   wsRef: {current: object},
  *   sendMessage: (msg: any) => void,
  *   addMessageListener: (fn: (ev: MessageEvent) => void) => void,
  *   removeMessageListener: (fn: (ev: MessageEvent) => void) => void,
- *   readyState: number
  * }}
  */
 export default function useWebsocket(url) {
@@ -15,24 +15,20 @@ export default function useWebsocket(url) {
     const queueRef = useRef([]);
     const listenersRef = useRef(new Set());
 
-    // Establish and clean up WebSocket connection
     useEffect(() => {
         const ws = new WebSocket(url);
         wsRef.current = ws;
 
-        // On open, flush queued messages
         ws.addEventListener('open', () => {
             console.log("Connected");
             queueRef.current.forEach(msg => ws.send(JSON.stringify(msg)));
             queueRef.current = [];
         });
 
-        // On message, notify all listeners
         ws.addEventListener('message', event => {
             listenersRef.current.forEach(fn => fn(event));
         });
 
-        // On error/close logging
         ws.addEventListener('error', e => console.error('WebSocket error', e));
         ws.addEventListener('close', () => console.log('WebSocket closed'));
 
@@ -62,8 +58,5 @@ export default function useWebsocket(url) {
         listenersRef.current.delete(fn);
     }, []);
 
-    // Expose current readyState
-    const readyState = wsRef.current?.readyState ?? WebSocket.CLOSED;
-
-    return { sendMessage, addMessageListener, removeMessageListener, readyState };
+    return {wsRef, sendMessage, addMessageListener, removeMessageListener};
 }

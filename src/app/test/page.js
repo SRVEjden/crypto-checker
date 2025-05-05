@@ -1,27 +1,27 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import UseWebsocket from "@/lib/hooks/UseWebsocket";
+import useWebsocket from "@/lib/hooks/useWebsocket";
 import { getAllCryptoPrice } from "@/lib/api/coinGecko";
 
 function Page(props) {
     const {
+        wsRef,
         sendMessage,
         addMessageListener,
         removeMessageListener,
-        readyState
-    } = UseWebsocket('wss://stream.binance.com:9443/ws');
+    } = useWebsocket('wss://stream.binance.com:9443/ws');
 
     const [message, setMessage] = useState({})
     const handle = () => {
-        if (readyState === WebSocket.OPEN) {
+        if (wsRef?.current?.readyState === WebSocket.OPEN) {
             sendMessage({
                 method: 'SUBSCRIBE',
-                params: ['BTCUSDT@ticker'],
+                params: ['btcusdt@ticker'],
                 id: Date.now(),
             });
         }
         else {
-            console.log(readyState);
+            console.log(wsRef.current);
         }
     }
     useEffect(() => {
@@ -29,23 +29,16 @@ function Page(props) {
         const handle = evt => {
             const data = JSON.parse(evt.data);
             setMessage(data);
-            console.log('Получили сообщение:', data);
+            console.log('Получили сообщение:', message);
         };
         addMessageListener(handle);
         return () => removeMessageListener(handle);
     }, [addMessageListener, removeMessageListener]);
 
-    // useEffect(() => {
-    //     // Ждём, пока сокет откроется, и отправляем запрос
-    //     if (readyState === WebSocket.OPEN) {
-    //         sendMessage({
-    //             method: 'SUBSCRIBE',
-    //             params: ['BTCUSDT@ticker'],
-    //             id: Date.now(),
-    //         });
-    //     }
-    // }, [readyState, sendMessage]);
-    return <div><button onClick={handle}>Aboba</button></div>;
+    return <div>
+        <button onClick={handle}>Subscribe</button>
+        <button onClick={() => console.log(wsRef.current)}>Readystate</button>
+    </div>;
 }
 
 export default Page
