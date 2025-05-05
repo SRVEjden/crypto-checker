@@ -1,9 +1,7 @@
-export default function DashboardLayout({ children }) {
+export default function RootLayout({ children }) {
 	return (
 		<html data-theme='synthwave' lang='en'>
-			<body>
-				<main>{children}</main>
-			</body>
+			<body>{children}</body>
 		</html>
 	);
 }
