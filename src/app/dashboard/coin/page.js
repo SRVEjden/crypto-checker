@@ -1,9 +1,15 @@
 'use client';
+import { useCoinStore } from '@/lib/stores/coinStore';
 import LinearChart from '../components/charts/LinearChart';
 import CoinTable from '../components/CoinTable';
 import OrderTable from '../components/OrderTable';
 import './style.scss';
+
 export default function Page() {
+	const currentCoin = useCoinStore(state => state.currentCoin);
+	const handle = () => {
+		console.log(currentCoin);
+	};
 	return (
 		<div className='flex flex-row m-[10px] h-screen'>
 			<button aria-label='Вернуться назад'>
@@ -22,6 +28,7 @@ export default function Page() {
 				</svg>
 			</button>
 			<div className='flex flex-col basis-7/10 pl-[2%] pt-[2%]'>
+				<button onClick={handle}>Check</button>
 				<LinearChart id={'bitcoin'} />
 				<CoinTable />
 			</div>

@@ -1,13 +1,15 @@
 import roundToThousandths from '@/lib/roundToThousandths';
 import { useCoinStore } from '@/lib/stores/coinStore';
+import { redirect } from 'next/navigation';
 function CryptoTableRow({ coin }) {
-	const { currentCoin, setCurrentCoin } = useCoinStore();
+	const setCurrentCoin = useCoinStore(state => state.setCurrentCoin);
 	let priceChangeColor;
 	if (coin.price_change_24h > 0) priceChangeColor = 'text-green-500';
 	else if (!coin.price_change_24h) priceChangeColor = `text-white-500`;
 	else priceChangeColor = `text-red-500`;
 	const clickHandler = e => {
-		console.log(coin.id);
+		setCurrentCoin({ id: coin.id, name: coin.name, symbol: coin.symbol });
+		redirect('/dashboard/coin');
 	};
 	return (
 		<tr onClick={clickHandler}>

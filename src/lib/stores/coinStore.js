@@ -1,15 +1,16 @@
 import { create } from 'zustand';
-
-export const useCoinStore = create(set => ({
-	currentCoin: {
-		id: '',
-		name: '',
-		tag: '',
-	},
-	setCurrentCoin: coin =>
-		set({
-			id: coin.id,
-			name: coin.name,
-			tag: coin.tag,
-		}),
-}));
+import { devtools } from 'zustand/middleware';
+export const useCoinStore = create(
+	devtools(set => ({
+		currentCoin: {
+			id: '',
+			name: '',
+			symbol: '',
+		},
+		setCurrentCoin: coin => set({ currentCoin: coin }),
+	})),
+	{
+		name: 'CoinStore',
+		serialize: true,
+	}
+);
