@@ -15,7 +15,7 @@ export default function OrderTable({ id }) {
 	return (
 		<>
 			<table>
-				<thead className='sticky top-0 bg-white dark:bg-gray-800 '>
+				<thead className='sticky top-0 bg-base-100 '>
 					<tr>
 						<th>Buy Orders</th>
 						<th>Price</th>
