@@ -1,15 +1,19 @@
+'use client';
 import roundToThousandths from '@/lib/roundToThousandths';
-import { useCoinStore } from '@/lib/stores/coinStore';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 function CryptoTableRow({ coin }) {
-	const setCurrentCoin = useCoinStore(state => state.setCurrentCoin);
+	const router = useRouter();
 	let priceChangeColor;
 	if (coin.price_change_24h > 0) priceChangeColor = 'text-green-500';
 	else if (!coin.price_change_24h) priceChangeColor = `text-white-500`;
 	else priceChangeColor = `text-red-500`;
 	const clickHandler = e => {
-		setCurrentCoin({ id: coin.id, name: coin.name, symbol: coin.symbol });
-		redirect('/dashboard/coin');
+		const params = new URLSearchParams({
+			id: coin.id,
+			name: coin.name,
+			symbol: coin.symbol,
+		});
+		router.push(`/dashboard/coin?${params}`);
 	};
 	return (
 		<tr onClick={clickHandler}>

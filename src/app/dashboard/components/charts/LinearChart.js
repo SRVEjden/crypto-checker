@@ -66,6 +66,6 @@ export default function LinearChart({
 			},
 		},
 	};
-
+	if (!data) return <div>Loading...</div>;
 	return <Line data={data} options={options} />;
 }

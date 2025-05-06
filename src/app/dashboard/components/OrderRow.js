@@ -1,10 +1,10 @@
 export default function OrderRow({ order }) {
 	return (
 		<tr>
-			<td>{order.bidCount}</td>
-			<td>{order.bidPrice}</td>
-			<td>{order.askCount}</td>
-			<td>{order.askPrice}</td>
+			<td className='text-center'>{order.bidCount}</td>
+			<td className='text-center'>{order.bidPrice}$</td>
+			<td className='text-center'>{order.askCount}</td>
+			<td className='text-center'>{order.askPrice}$</td>
 		</tr>
 	);
 }

@@ -1,18 +1,35 @@
 'use client';
-import { useCoinStore } from '@/lib/stores/coinStore';
+import { getCoinInfo } from '@/lib/api/coinGecko';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import LinearChart from '../components/charts/LinearChart';
 import CoinTable from '../components/CoinTable';
 import OrderTable from '../components/OrderTable';
 import './style.scss';
 
 export default function Page() {
-	const currentCoin = useCoinStore(state => state.currentCoin);
-	const handle = () => {
-		console.log(currentCoin);
+	const router = useRouter();
+	const clickHandler = () => {
+		router.back();
 	};
+	const searchParams = useSearchParams();
+	const { id, name, symbol } = {
+		id: searchParams.get('id'),
+		name: searchParams.get('name'),
+		symbol: searchParams.get('symbol'),
+	};
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = await getCoinInfo(id);
+			console.log(data);
+			setCoin(data);
+		};
+		fetchData();
+	}, []);
+	const [coin, setCoin] = useState({});
 	return (
-		<div className='flex flex-row m-[10px] h-screen'>
-			<button aria-label='Вернуться назад'>
+		<div className='flex flex-row m-[10px]'>
+			<button onClick={clickHandler} aria-label='Вернуться назад'>
 				<svg
 					xmlns='http://www.w3.org/2000/svg'
 					width='20'
@@ -28,13 +45,16 @@ export default function Page() {
 				</svg>
 			</button>
 			<div className='flex flex-col basis-7/10 pl-[2%] pt-[2%]'>
-				<button onClick={handle}>Check</button>
-				<LinearChart id={'bitcoin'} />
-				<CoinTable />
+				<LinearChart
+					id={id}
+					label={`${symbol.toUpperCase()}/USD`}
+					titleText={`${symbol.toUpperCase()}/USD`}
+				/>
+				<CoinTable coin={coin} />
 			</div>
-			<div className='flex justify-center h-full basis-3/10 p-[2%]'>
-				<div className='h-full overflow-y-auto'>
-					<OrderTable id={'BTC'} />
+			<div className='flex justify-center h-full basis-3/10 pt-[10px]'>
+				<div className='h-full w-full overflow-y-auto scroll-smooth max-h-[95vh]'>
+					<OrderTable id={symbol} />
 				</div>
 			</div>
 		</div>
