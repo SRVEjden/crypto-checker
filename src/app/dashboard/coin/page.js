@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import LinearChart from '../components/charts/LinearChart';
 import CoinTable from '../components/CoinTable';
-import OrderTable from '../components/OrderTable';
 import './style.scss';
 
 export default function Page() {
@@ -51,11 +50,6 @@ export default function Page() {
 					titleText={`${symbol.toUpperCase()}/USD`}
 				/>
 				<CoinTable coin={coin} />
-			</div>
-			<div className='flex justify-center h-full basis-3/10 pt-[10px]'>
-				<div className='h-full w-full overflow-y-auto scroll-smooth max-h-[95vh]'>
-					<OrderTable id={symbol} />
-				</div>
 			</div>
 		</div>
 	);
