@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import CoinTable from '../components/CoinTable';
+import ErrorDisplay from '../components/ErrorDisplay';
 import Loader from '../components/Loading';
 import OrderTable from '../components/OrderTable';
 import './style.scss';
@@ -55,8 +56,8 @@ export default function Page() {
 	};
 
 	if (isCoinLoading || isPriceLoading) return <Loader />;
-	if (isCoinError) return <div>Ошибка: {coinError.message}</div>;
-	if (isPriceError) return <div>Ошибка: {priceError.message}</div>;
+	if (isCoinError) return <ErrorDisplay error={coinError} />;
+	if (isPriceError) return <ErrorDisplay error={priceError} />;
 	return (
 		<div className='flex flex-row m-[10px]'>
 			<button onClick={clickHandler} aria-label='Вернуться назад'>

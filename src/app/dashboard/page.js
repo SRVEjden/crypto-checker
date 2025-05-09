@@ -4,6 +4,7 @@ import CryptoTable from '@/app/dashboard/components/CryptoTable';
 import { getAllCryptoPrice } from '@/lib/api/coinGecko';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import ErrorDisplay from './components/ErrorDisplay';
 import Loader from './components/Loading';
 import './dashboard.scss';
 
@@ -13,6 +14,7 @@ function Page(props) {
 		data: cryptoList,
 		isLoading,
 		isError,
+		error,
 	} = useQuery({
 		queryKey: ['coins'],
 		queryFn: () => getAllCryptoPrice(),
@@ -24,7 +26,7 @@ function Page(props) {
 	}
 
 	if (isError) {
-		return <div>Error loading data.</div>;
+		return <ErrorDisplay error={error} />;
 	}
 
 	function changeHandler(e) {

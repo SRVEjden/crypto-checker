@@ -18,7 +18,7 @@ const getAllCryptoPrice = () => {
 			`https://api.coingecko.com/api/v3/coins/markets?${params}`
 		).then(response => response.json());
 	} catch (error) {
-		console.log(error.message);
+		throw new Error(error);
 	}
 };
 
@@ -41,7 +41,7 @@ const getAllTimePrice = async (id, days = '365d', interval = 'daily') => {
 		});
 		return { formattedTime, formattedValue };
 	} catch (error) {
-		console.log(error.message);
+		throw new Error(error);
 	}
 };
 const getBidsAndAsks = async (symbol, limit = 10) => {
@@ -64,7 +64,7 @@ const getBidsAndAsks = async (symbol, limit = 10) => {
 		}
 		return result;
 	} catch (error) {
-		console.log(error.message);
+		throw new Error(error);
 	}
 };
 const getCoinInfo = async id => {
@@ -94,7 +94,7 @@ const getCoinInfo = async id => {
 			total_volume: data.total_volume,
 		};
 	} catch (error) {
-		console.log(error.message);
+		throw new Error(Error);
 	}
 };
 export { getAllCryptoPrice, getAllTimePrice, getBidsAndAsks, getCoinInfo };
