@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.75.5",
     "@trpc/tanstack-react-query": "^11.1.2",
     "chart.js": "^4.4.9",
     "next": "15.3.1",

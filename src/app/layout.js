@@ -1,7 +1,12 @@
-export default function RootLayout({ children }) {
+import ReactQueryProvider from "@/app/components/ReactQueryProvider";
+export default function RootLayout({ children, pageProps }) {
 	return (
 		<html data-theme='synthwave' lang='en'>
-			<body>{children}</body>
+			<body>
+			<ReactQueryProvider>
+				{children}
+			</ReactQueryProvider>
+			</body>
 		</html>
 	);
 }
