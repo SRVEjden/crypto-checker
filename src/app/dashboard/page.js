@@ -4,6 +4,7 @@ import CryptoTable from '@/app/dashboard/components/CryptoTable';
 import { getAllCryptoPrice } from '@/lib/api/coinGecko';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import Loader from './components/Loading';
 import './dashboard.scss';
 
 function Page(props) {
@@ -15,10 +16,11 @@ function Page(props) {
 	} = useQuery({
 		queryKey: ['coins'],
 		queryFn: () => getAllCryptoPrice(),
-		staleTime: 10 * 1000,
+		staleTime: 9.9 * 1000,
+		refetchInterval: 10 * 1000,
 	});
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return <Loader />;
 	}
 
 	if (isError) {

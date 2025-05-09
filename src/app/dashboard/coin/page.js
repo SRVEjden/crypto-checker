@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import CoinTable from '../components/CoinTable';
+import Loader from '../components/Loading';
 import OrderTable from '../components/OrderTable';
 import './style.scss';
 const Chart = dynamic(() => import('../components/charts/Chart'), {
@@ -28,7 +29,9 @@ export default function Page() {
 	} = useQuery({
 		queryKey: ['coinInfo', id],
 		queryFn: () => getCoinInfo(id),
-		staleTime: 1000 * 60 * 2,
+		staleTime: 19.9 * 1000,
+		refetchInterval: 20 * 1000,
+		refetchIntervalInBackground: true,
 		retry: 1,
 	});
 	const {
@@ -39,7 +42,7 @@ export default function Page() {
 	} = useQuery({
 		queryKey: ['allTimePrice', id, period],
 		queryFn: () => getAllTimePrice(id, period),
-		staleTime: 1000 * 10,
+		staleTime: 1000 * 24 * 60 * 60,
 		placeholderData: previousData => previousData,
 		enabled: !!id && !!period,
 	});
@@ -51,7 +54,7 @@ export default function Page() {
 		getAllTimePrice(id, period).then(data => setDataset(data));
 	};
 
-	if (isCoinLoading || isPriceLoading) return <div>Загрузка…</div>;
+	if (isCoinLoading || isPriceLoading) return <Loader />;
 	if (isCoinError) return <div>Ошибка: {coinError.message}</div>;
 	if (isPriceError) return <div>Ошибка: {priceError.message}</div>;
 	return (
