@@ -13,15 +13,9 @@ function Page(props) {
 	}
 
 	useEffect(() => {
-		async function fetchPrices() {
-			try {
-				const list = await getAllCryptoPrice();
-				setCryptoList(list);
-			} catch (err) {
-				console.error("Couldn't find crypto list, check connection", err);
-			}
-		}
-		fetchPrices();
+		getAllCryptoPrice().then((data) => {
+			setCryptoList(data);
+		})
 	}, []);
 	return (
 		<div className='flex flex-col items-center m-[10px]'>
