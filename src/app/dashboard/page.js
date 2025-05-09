@@ -10,8 +10,7 @@ function Page(props) {
 	const [cryptoString, setCryptoString] = useState('');
 	const {data: cryptoList, isLoading, isError} = useQuery({
 		queryKey:['coins'],
-		queryFn: getAllCryptoPrice,
-		initialData: [],
+		queryFn: () => getAllCryptoPrice(),
 	})
 	if (isLoading) {
 		return <div>Loading...</div>;
