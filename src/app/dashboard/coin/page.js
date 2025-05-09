@@ -1,12 +1,13 @@
 'use client';
-import { getCoinInfo } from '@/lib/api/coinGecko';
+import { getAllTimePrice, getCoinInfo } from '@/lib/api/coinGecko';
+import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import LinearChart from '../components/charts/LinearChart';
 import CoinTable from '../components/CoinTable';
-import OrderTable from '../components/OrderTable';
 import './style.scss';
-
+const Chart = dynamic(() => import('../components/charts/Chart'), {
+	ssr: false,
+});
 export default function Page() {
 	const router = useRouter();
 	const clickHandler = () => {
@@ -20,13 +21,16 @@ export default function Page() {
 	};
 	useEffect(() => {
 		const fetchData = async () => {
-			const data = await getCoinInfo(id);
-			console.log(data);
-			setCoin(data);
+			await getCoinInfo(id).then(data => setCoin(data));
+			await getAllTimePrice(id).then(data => setDataset(data));
 		};
 		fetchData();
 	}, []);
+	const changePeriod = async period => {
+		getAllTimePrice(id, period).then(data => setDataset(data));
+	};
 	const [coin, setCoin] = useState({});
+	const [dataset, setDataset] = useState({});
 	return (
 		<div className='flex flex-row m-[10px]'>
 			<button onClick={clickHandler} aria-label='Вернуться назад'>
@@ -45,17 +49,40 @@ export default function Page() {
 				</svg>
 			</button>
 			<div className='flex flex-col basis-7/10 pl-[2%] pt-[2%]'>
-				<LinearChart
-					id={id}
-					label={`${symbol.toUpperCase()}/USD`}
-					titleText={`${symbol.toUpperCase()}/USD`}
-				/>
-				<CoinTable coin={coin} />
-			</div>
-			<div className='flex justify-center h-full basis-3/10 pt-[10px]'>
-				<div className='h-full w-full overflow-y-auto scroll-smooth max-h-[95vh]'>
-					<OrderTable id={symbol} />
+				<div>
+					<div>
+						<button
+							className='btn btn-neutral ml-[4px]'
+							onClick={() => changePeriod('7d')}
+						>
+							1 Week
+						</button>
+						<button
+							className='btn btn-neutral ml-[4px]'
+							onClick={() => changePeriod('31d')}
+						>
+							1 Month
+						</button>
+						<button
+							className='btn btn-neutral ml-[4px]'
+							onClick={() => changePeriod('93d')}
+						>
+							3 Month
+						</button>
+						<button
+							className='btn btn-neutral ml-[4px]'
+							onClick={() => changePeriod('365d')}
+						>
+							1 Year
+						</button>
+					</div>
+					<Chart
+						dataset={dataset}
+						label={`${coin?.symbol?.toUpperCase()}/USD`}
+						titleText={`${coin?.symbol?.toUpperCase()}/USD`}
+					/>
 				</div>
+				<CoinTable coin={coin} />
 			</div>
 		</div>
 	);
