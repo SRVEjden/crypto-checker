@@ -1,18 +1,22 @@
 'use client';
 import { getBidsAndAsks } from '@/lib/api/coinGecko';
-import { useEffect, useState } from 'react';
-
+import { useQuery } from '@tanstack/react-query';
 import OrderRow from './OrderRow';
 
 export default function OrderTable({ id }) {
-	useEffect(() => {
-		const fetchData = async () => {
-			const data = await getBidsAndAsks(id);
-			setOrders(prev => data);
-		};
-		fetchData();
-	}, []);
-	const [orders, setOrders] = useState([]);
+	const {
+		data: orders,
+		isError,
+		isLoading,
+		error,
+	} = useQuery({
+		queryKey: ['orders', id],
+		queryFn: () => getBidsAndAsks(id),
+		staleTime: 30 * 1000,
+		retry: 1,
+	});
+	if (isLoading) return <div>Loading...</div>;
+	if (isError) return <div>{error?.message}</div>;
 	return (
 		<>
 			<table className='w-full h-9/10'>

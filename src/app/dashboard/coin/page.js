@@ -1,10 +1,12 @@
 'use client';
 import { getAllTimePrice, getCoinInfo } from '@/lib/api/coinGecko';
+import { mockDataObj } from '@/lib/api/mockServerData';
 import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import CoinTable from '../components/CoinTable';
+import OrderTable from '../components/OrderTable';
 import './style.scss';
 const Chart = dynamic(() => import('../components/charts/Chart'), {
 	ssr: false,
@@ -16,7 +18,7 @@ export default function Page() {
 	const name = searchParams.get('name');
 	const symbol = searchParams.get('symbol');
 
-	const [period, setPeriod] = useState('7d');
+	const [period, setPeriod] = useState('365d');
 
 	const {
 		data: coin,
@@ -51,8 +53,7 @@ export default function Page() {
 
 	if (isCoinLoading || isPriceLoading) return <div>Загрузка…</div>;
 	if (isCoinError) return <div>Ошибка: {coinError.message}</div>;
-	if (isPriceError) return <div>Ошибка: {priceError.message}</div>; //Не уверен, что оно так правильно, проверь пажожда
-	//Эти ерроры - errorObject. У меня мозги кипят
+	if (isPriceError) return <div>Ошибка: {priceError.message}</div>;
 	return (
 		<div className='flex flex-row m-[10px]'>
 			<button onClick={clickHandler} aria-label='Вернуться назад'>
@@ -105,6 +106,11 @@ export default function Page() {
 					/>
 				</div>
 				<CoinTable coin={coin} />
+			</div>
+			<div className='basis-3/10 overflow-y-auto h-[95vh] mt-[10px]'>
+				<OrderTable
+					id={mockDataObj()[name.replaceAll(' ', '')].binanceSymbol}
+				/>
 			</div>
 		</div>
 	);
