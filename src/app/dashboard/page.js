@@ -14,8 +14,7 @@ function Page(props) {
 		isError,
 	} = useQuery({
 		queryKey: ['coins'],
-		queryFn: getAllCryptoPrice,
-		initialData: [],
+		queryFn: () => getAllCryptoPrice(),
 		staleTime: 10 * 1000,
 	});
 	if (isLoading) {
