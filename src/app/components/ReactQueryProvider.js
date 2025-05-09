@@ -6,7 +6,16 @@ import {
 } from '@tanstack/react-query';
 
 export function ReactQueryProvider({ children, state }) {
-    const [qc] = useState(() => new QueryClient());
+    const [qc] = useState(() => new QueryClient(
+        {
+            defaultOptions: {
+                queries: {
+                    staleTime: 1000 * 60 * 2,
+                    retry: 1,
+                },
+            },
+        }
+    ));
     return (
         <QueryClientProvider client={qc}>
             {children}

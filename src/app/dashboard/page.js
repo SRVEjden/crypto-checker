@@ -4,19 +4,26 @@ import CryptoTable from '@/app/dashboard/components/CryptoTable';
 import { getAllCryptoPrice } from '@/lib/api/coinGecko';
 import { useEffect, useState } from 'react';
 import './dashboard.scss';
+import {useQuery} from "@tanstack/react-query";
 
 function Page(props) {
-	const [cryptoList, setCryptoList] = useState([]);
 	const [cryptoString, setCryptoString] = useState('');
+	const {data: cryptoList, isLoading, isError} = useQuery({
+		queryKey:['coins'],
+		queryFn: getAllCryptoPrice,
+		initialData: [],
+	})
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+
+	if (isError) {
+		return <div>Error loading data.</div>;
+	}
+
 	function changeHandler(e) {
 		setCryptoString(e.target.value);
 	}
-
-	useEffect(() => {
-		getAllCryptoPrice().then((data) => {
-			setCryptoList(data);
-		})
-	}, []);
 	return (
 		<div className='flex flex-col items-center m-[10px]'>
 			<CoinSearch onChange={changeHandler} cryptoString={cryptoString} />

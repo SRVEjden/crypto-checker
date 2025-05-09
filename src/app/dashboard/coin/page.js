@@ -5,32 +5,54 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CoinTable from '../components/CoinTable';
 import './style.scss';
+import {useQuery} from "@tanstack/react-query";
 const Chart = dynamic(() => import('../components/charts/Chart'), {
 	ssr: false,
 });
 export default function Page() {
 	const router = useRouter();
+	const searchParams = useSearchParams();
+	const id     = searchParams.get('id');
+	const name   = searchParams.get('name');
+	const symbol = searchParams.get('symbol');
+
+	const [period, setPeriod] = useState('7d')
+
+	const {
+		data: coin,
+		isLoading: isCoinLoading,
+		isError: isCoinError,
+		error: coinError,
+	} = useQuery({
+		queryKey: ['coinInfo', id],
+		queryFn: () => getCoinInfo(id),
+		staleTime: 1000 * 60 * 2,
+		retry: 1,
+		});
+	const {
+		data: dataset,
+		isLoading: isPriceLoading,
+		isError: isPriceError,
+		error: priceError,
+	} = useQuery({
+		queryKey: ['allTimePrice', id, period],
+		queryFn: () => getAllTimePrice(id, period),
+		staleTime: 1000 * 10,
+		placeholderData: previousData => previousData,
+		enabled: !!id && !!period,
+});
+
 	const clickHandler = () => {
 		router.back();
 	};
-	const searchParams = useSearchParams();
-	const { id, name, symbol } = {
-		id: searchParams.get('id'),
-		name: searchParams.get('name'),
-		symbol: searchParams.get('symbol'),
-	};
-	useEffect(() => {
-		const fetchData = async () => {
-			await getCoinInfo(id).then(data => setCoin(data));
-			await getAllTimePrice(id).then(data => setDataset(data));
-		};
-		fetchData();
-	}, []);
 	const changePeriod = async period => {
 		getAllTimePrice(id, period).then(data => setDataset(data));
 	};
-	const [coin, setCoin] = useState({});
-	const [dataset, setDataset] = useState({});
+
+	if (isCoinLoading || isPriceLoading) return <div>Загрузка…</div>
+	if (isCoinError)   return <div>Ошибка: {coinError.message}</div>
+	if (isPriceError)  return <div>Ошибка: {priceError.message}</div> //Не уверен, что оно так правильно, проверь пажожда
+																	  //Эти ерроры - errorObject. У меня мозги кипят
 	return (
 		<div className='flex flex-row m-[10px]'>
 			<button onClick={clickHandler} aria-label='Вернуться назад'>
@@ -53,25 +75,25 @@ export default function Page() {
 					<div>
 						<button
 							className='btn btn-neutral ml-[4px]'
-							onClick={() => changePeriod('7d')}
+							onClick={() => setPeriod('7d')}
 						>
 							1 Week
 						</button>
 						<button
 							className='btn btn-neutral ml-[4px]'
-							onClick={() => changePeriod('31d')}
+							onClick={() => setPeriod('31d')}
 						>
 							1 Month
 						</button>
 						<button
 							className='btn btn-neutral ml-[4px]'
-							onClick={() => changePeriod('93d')}
+							onClick={() => setPeriod('93d')}
 						>
 							3 Month
 						</button>
 						<button
 							className='btn btn-neutral ml-[4px]'
-							onClick={() => changePeriod('365d')}
+							onClick={() => setPeriod('365d')}
 						>
 							1 Year
 						</button>
