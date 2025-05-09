@@ -1,3 +1,4 @@
+import {mockServerData} from "@/lib/api/mockServerData";
 function removeTrailingZeros(str) {
 	return str.replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '');
 }
@@ -9,6 +10,7 @@ const getAllCryptoPrice = async () => {
 			price_change_percentage: '24h',
 			sparkline: 'false',
 			per_page: '250',
+			ids: mockServerData(),
 		});
 		const response = await fetch(
 			`https://api.coingecko.com/api/v3/coins/markets?${params}`
