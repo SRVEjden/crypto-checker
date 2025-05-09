@@ -1,9 +1,10 @@
-import {mockServerData} from "@/lib/api/mockServerData";
+import { mockServerData } from '@/lib/api/mockServerData';
 
 function removeTrailingZeros(str) {
 	return str.replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '');
 }
 const getAllCryptoPrice = () => {
+	console.log('getAllCryptoPrices');
 	try {
 		const params = new URLSearchParams({
 			vs_currency: 'usd',
@@ -16,13 +17,13 @@ const getAllCryptoPrice = () => {
 		return fetch(
 			`https://api.coingecko.com/api/v3/coins/markets?${params}`
 		).then(response => response.json());
-
 	} catch (error) {
 		console.log(error.message);
 	}
 };
 
 const getAllTimePrice = async (id, days = '365d', interval = 'daily') => {
+	console.log('All Time Price');
 	try {
 		const params = new URLSearchParams({
 			vs_currency: 'usd',
@@ -67,6 +68,7 @@ const getBidsAndAsks = async (symbol, limit = 10) => {
 	}
 };
 const getCoinInfo = async id => {
+	console.log('Coin Info');
 	try {
 		const params = new URLSearchParams({
 			vs_currency: 'usd',

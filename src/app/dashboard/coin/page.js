@@ -1,22 +1,22 @@
 'use client';
 import { getAllTimePrice, getCoinInfo } from '@/lib/api/coinGecko';
+import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CoinTable from '../components/CoinTable';
 import './style.scss';
-import {useQuery} from "@tanstack/react-query";
 const Chart = dynamic(() => import('../components/charts/Chart'), {
 	ssr: false,
 });
 export default function Page() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const id     = searchParams.get('id');
-	const name   = searchParams.get('name');
+	const id = searchParams.get('id');
+	const name = searchParams.get('name');
 	const symbol = searchParams.get('symbol');
 
-	const [period, setPeriod] = useState('7d')
+	const [period, setPeriod] = useState('7d');
 
 	const {
 		data: coin,
@@ -28,7 +28,7 @@ export default function Page() {
 		queryFn: () => getCoinInfo(id),
 		staleTime: 1000 * 60 * 2,
 		retry: 1,
-		});
+	});
 	const {
 		data: dataset,
 		isLoading: isPriceLoading,
@@ -40,7 +40,7 @@ export default function Page() {
 		staleTime: 1000 * 10,
 		placeholderData: previousData => previousData,
 		enabled: !!id && !!period,
-});
+	});
 
 	const clickHandler = () => {
 		router.back();
@@ -49,10 +49,10 @@ export default function Page() {
 		getAllTimePrice(id, period).then(data => setDataset(data));
 	};
 
-	if (isCoinLoading || isPriceLoading) return <div>Загрузка…</div>
-	if (isCoinError)   return <div>Ошибка: {coinError.message}</div>
-	if (isPriceError)  return <div>Ошибка: {priceError.message}</div> //Не уверен, что оно так правильно, проверь пажожда
-																	  //Эти ерроры - errorObject. У меня мозги кипят
+	if (isCoinLoading || isPriceLoading) return <div>Загрузка…</div>;
+	if (isCoinError) return <div>Ошибка: {coinError.message}</div>;
+	if (isPriceError) return <div>Ошибка: {priceError.message}</div>; //Не уверен, что оно так правильно, проверь пажожда
+	//Эти ерроры - errorObject. У меня мозги кипят
 	return (
 		<div className='flex flex-row m-[10px]'>
 			<button onClick={clickHandler} aria-label='Вернуться назад'>
