@@ -33,7 +33,6 @@ function Chart({
 	titleText,
 	dataset,
 }) {
-	console.log('Render');
 	const data = useMemo(() => ({
 		labels: dataset?.formattedTime,
 		datasets: [
@@ -89,8 +88,4 @@ function Chart({
 	if (!data) return <Loader />;
 	return <Line data={data} options={options} />;
 }
-Chart.whyDidYouRender = {
-	logOnDifferentValues: true,
-	customName: 'Chart',
-};
 export default memo(Chart);
