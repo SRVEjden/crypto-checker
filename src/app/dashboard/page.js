@@ -20,6 +20,7 @@ function Page(props) {
 		queryFn: () => getAllCryptoPrice(),
 		staleTime: 9.9 * 1000,
 		refetchInterval: 10 * 1000,
+		cacheTime: 60 * 1000,
 	});
 	if (isLoading) {
 		return <Loader />;

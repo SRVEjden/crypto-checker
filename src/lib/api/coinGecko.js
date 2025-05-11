@@ -4,7 +4,6 @@ function removeTrailingZeros(str) {
 	return str.replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '');
 }
 const getAllCryptoPrice = () => {
-	console.log('getAllCryptoPrices');
 	try {
 		const params = new URLSearchParams({
 			vs_currency: 'usd',
@@ -23,7 +22,6 @@ const getAllCryptoPrice = () => {
 };
 
 const getAllTimePrice = async (id, days = '365d', interval = 'daily') => {
-	console.log('All Time Price');
 	try {
 		const params = new URLSearchParams({
 			vs_currency: 'usd',
@@ -31,7 +29,7 @@ const getAllTimePrice = async (id, days = '365d', interval = 'daily') => {
 			interval: interval,
 		});
 		const response = await fetch(
-			`https://api.coingecko.com/api/v3//coins/${id}/market_chart?${params}`
+			`https://api.coingecko.com/api/v3/coins/${id}/market_chart?${params}`
 		);
 		const formattedTime = [];
 		const formattedValue = [];
@@ -68,7 +66,6 @@ const getBidsAndAsks = async (symbol, limit = 10) => {
 	}
 };
 const getCoinInfo = async id => {
-	console.log('Coin Info');
 	try {
 		const params = new URLSearchParams({
 			vs_currency: 'usd',
@@ -94,7 +91,7 @@ const getCoinInfo = async id => {
 			total_volume: data.total_volume,
 		};
 	} catch (error) {
-		throw new Error(Error);
+		throw new Error(error);
 	}
 };
 export { getAllCryptoPrice, getAllTimePrice, getBidsAndAsks, getCoinInfo };

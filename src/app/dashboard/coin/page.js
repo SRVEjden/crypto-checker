@@ -34,6 +34,8 @@ export default function Page() {
 		refetchInterval: 20 * 1000,
 		refetchIntervalInBackground: true,
 		retry: 1,
+		refetchOnMount: false,
+		cacheTime: 60 * 1000,
 	});
 	const {
 		data: dataset,
@@ -46,6 +48,7 @@ export default function Page() {
 		staleTime: 1000 * 24 * 60 * 60,
 		placeholderData: previousData => previousData,
 		enabled: !!id && !!period,
+		cacheTime: 60 * 1000,
 	});
 
 	const clickHandler = () => {
@@ -54,7 +57,6 @@ export default function Page() {
 	const changePeriod = async period => {
 		getAllTimePrice(id, period).then(data => setDataset(data));
 	};
-
 	if (isCoinLoading || isPriceLoading) return <Loader />;
 	if (isCoinError) return <ErrorDisplay error={coinError} />;
 	if (isPriceError) return <ErrorDisplay error={priceError} />;

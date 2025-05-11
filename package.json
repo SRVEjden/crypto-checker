@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@welldone-software/why-did-you-render": "^10.0.1",
     "daisyui": "^5.0.35",
     "sass": "^1.87.0",
     "tailwindcss": "^4"

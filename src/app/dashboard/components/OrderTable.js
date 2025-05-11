@@ -3,7 +3,7 @@ import { getBidsAndAsks } from '@/lib/api/coinGecko';
 import { useQuery } from '@tanstack/react-query';
 import Loader from './Loading';
 import OrderRow from './OrderRow';
-export default function OrderTable({ id }) {
+function OrderTable({ id }) {
 	const {
 		data: orders,
 		isError,
@@ -41,3 +41,5 @@ export default function OrderTable({ id }) {
 		</>
 	);
 }
+OrderTable.whyDidYouRender = true;
+export default OrderTable;

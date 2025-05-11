@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import { Line } from 'react-chartjs-2';
+import Loader from '../Loading';
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
@@ -23,7 +24,7 @@ ChartJS.register(
 	Filler,
 	zoomPlugin
 );
-export default function Chart({
+function Chart({
 	borderColor,
 	backgroundColor,
 	borderWidth,
@@ -31,6 +32,7 @@ export default function Chart({
 	titleText,
 	dataset,
 }) {
+	console.log('rerender');
 	const data = {
 		labels: dataset?.formattedTime,
 		datasets: [
@@ -83,6 +85,8 @@ export default function Chart({
 			intersect: false,
 		},
 	};
-	if (!data) return <div>Loading...</div>;
+	if (!data) return <Loader />;
 	return <Line data={data} options={options} />;
 }
+Chart.whyDidYouRender = true;
+export default Chart;
