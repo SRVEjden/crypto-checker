@@ -50,8 +50,4 @@ function PriceChart({ id, symbol }) {
 		</div>
 	);
 }
-PriceChart.whyDidYouRender = {
-	logOnDifferentValues: true,
-	customName: 'Chart',
-};
 export default memo(PriceChart);
