@@ -54,6 +54,7 @@ const getBidsAndAsks = async (symbol, limit = 10) => {
 		const data = await response.json();
 		for (let i = 0; i < data.bids.length; i++) {
 			result.push({
+				id: crypto.randomUUID(),
 				bidCount: removeTrailingZeros(data.bids[i][1]),
 				bidPrice: removeTrailingZeros(data.bids[i][0]),
 				askPrice: removeTrailingZeros(data.asks[i][0]),

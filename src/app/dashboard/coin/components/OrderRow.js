@@ -1,4 +1,6 @@
-export default function OrderRow({ order }) {
+import { memo } from 'react';
+
+function OrderRow({ order }) {
 	return (
 		<tr>
 			<td className='text-center'>{order.bidCount}</td>
@@ -8,3 +10,4 @@ export default function OrderRow({ order }) {
 		</tr>
 	);
 }
+export default memo(OrderRow);

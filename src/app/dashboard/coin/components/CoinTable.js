@@ -1,4 +1,26 @@
-export default function CoinTable({ coin }) {
+'use client';
+import { getCoinInfo } from '@/lib/api/coinGecko';
+import { useQuery } from '@tanstack/react-query';
+import ErrorDisplay from '../../../../components/ErrorDisplay';
+import Loader from '../../../../components/Loading';
+export default function CoinTable({ id }) {
+	const {
+		data: coin,
+		isLoading: isCoinLoading,
+		isError: isCoinError,
+		error: coinError,
+	} = useQuery({
+		queryKey: ['coinInfo', id],
+		queryFn: () => getCoinInfo(id),
+		staleTime: 19.9 * 1000,
+		refetchInterval: 20 * 1000,
+		refetchIntervalInBackground: true,
+		retry: 1,
+		refetchOnMount: false,
+		cacheTime: 60 * 1000,
+	});
+	if (isCoinLoading) return <Loader />;
+	if (isCoinError) return <ErrorDisplay error={coinError} />;
 	return (
 		<table className='max-h-1/12'>
 			<thead>

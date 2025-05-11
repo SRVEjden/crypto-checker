@@ -11,6 +11,7 @@ import {
 	Tooltip,
 } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
+import { memo, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import Loader from '../Loading';
 ChartJS.register(
@@ -32,8 +33,8 @@ function Chart({
 	titleText,
 	dataset,
 }) {
-	console.log('rerender');
-	const data = {
+	console.log('Render');
+	const data = useMemo(() => ({
 		labels: dataset?.formattedTime,
 		datasets: [
 			{
@@ -44,9 +45,9 @@ function Chart({
 				label: label || 'Продажи за 2023 год',
 			},
 		],
-	};
+	}));
 
-	const options = {
+	const options = useMemo(() => ({
 		responsive: true,
 		scales: {
 			y: {
@@ -84,9 +85,12 @@ function Chart({
 			axis: 'x',
 			intersect: false,
 		},
-	};
+	}));
 	if (!data) return <Loader />;
 	return <Line data={data} options={options} />;
 }
-Chart.whyDidYouRender = true;
-export default Chart;
+Chart.whyDidYouRender = {
+	logOnDifferentValues: true,
+	customName: 'Chart',
+};
+export default memo(Chart);

@@ -1,7 +1,9 @@
 'use client';
 import { getBidsAndAsks } from '@/lib/api/coinGecko';
 import { useQuery } from '@tanstack/react-query';
-import Loader from './Loading';
+import { memo } from 'react';
+import ErrorDisplay from '../../../../components/ErrorDisplay';
+import Loader from '../../../../components/Loading';
 import OrderRow from './OrderRow';
 function OrderTable({ id }) {
 	const {
@@ -18,7 +20,7 @@ function OrderTable({ id }) {
 		retry: 1,
 	});
 	if (isLoading) return <Loader />;
-	if (isError) return <div>{error?.message}</div>;
+	if (isError) return <ErrorDisplay error={error} />;
 	return (
 		<>
 			<table className='w-full h-9/10'>
@@ -32,14 +34,11 @@ function OrderTable({ id }) {
 				</thead>
 				<tbody>
 					{orders?.map(order => {
-						return (
-							<OrderRow key={crypto.randomUUID()} order={order}></OrderRow>
-						);
+						return <OrderRow key={order.id} order={order}></OrderRow>;
 					})}
 				</tbody>
 			</table>
 		</>
 	);
 }
-OrderTable.whyDidYouRender = true;
-export default OrderTable;
+export default memo(OrderTable);

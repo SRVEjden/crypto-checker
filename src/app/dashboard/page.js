@@ -4,8 +4,8 @@ import CryptoTable from '@/app/dashboard/components/CryptoTable';
 import { getAllCryptoPrice } from '@/lib/api/coinGecko';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import ErrorDisplay from './components/ErrorDisplay';
-import Loader from './components/Loading';
+import ErrorDisplay from '../../components/ErrorDisplay';
+import Loader from '../../components/Loading';
 import './dashboard.scss';
 
 function Page(props) {
