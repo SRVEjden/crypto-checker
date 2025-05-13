@@ -8,7 +8,6 @@ function CryptoTable({ cryptoString, cryptoList }) {
 		direction: 'desc',
 	});
 
-	console.log("aboba")
 	const toggleSort = useCallback((key) => {
 		setSortConfig((prev) => ({
 			key,
