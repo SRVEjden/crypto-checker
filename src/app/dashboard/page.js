@@ -7,7 +7,7 @@ import { useState } from 'react';
 import ErrorDisplay from '../../components/ErrorDisplay';
 import Loader from '../../components/Loading';
 import './dashboard.scss';
-
+import VirtualCryptoTable from "@/app/dashboard/components/VirtualCryptoTable";
 function Page(props) {
 	const [cryptoString, setCryptoString] = useState('');
 	const {
@@ -33,15 +33,17 @@ function Page(props) {
 	function changeHandler(e) {
 		setCryptoString(e.target.value);
 	}
+
 	return (
 		<div className='flex flex-col items-center m-[10px]'>
 			<CoinSearch onChange={changeHandler} cryptoString={cryptoString} />
 			<div className='pt-1'>
-				<CryptoTable
-					className='h-full'
-					cryptoString={cryptoString}
-					cryptoList={cryptoList}
-				/>
+				{/*<CryptoTable*/}
+				{/*	className='h-full'*/}
+				{/*	cryptoString={cryptoString}*/}
+				{/*	cryptoList={cryptoList}*/}
+				{/*/>*/}
+				<VirtualCryptoTable cryptoString={cryptoString} cryptoList={cryptoList}/>
 			</div>
 		</div>
 	);
