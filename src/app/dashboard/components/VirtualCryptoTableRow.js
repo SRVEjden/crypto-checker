@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 import roundToThousandths from '@/lib/roundToThousandths';
 
 /**
- * Одна строка таблицы-грида.
+ * One row for gridTable
  *
  * @param {object}   props
- * @param {Coin}     props.coin             объект монеты
- * @param {string}   props.gridTemplate     значение grid-шаблона колонок
- * @param {object}   [props.style]          inline-стили от виртуализатора
+ * @param {Coin}     props.coin             coin obj
+ * @param {string}   props.gridTemplate     grid-template value
+ * @param {object}   [props.style]          inline-styles from virtualizer
  */
 const VirtualCryptoTableRow = forwardRef(function VirtualCryptoTableRow(
     { coin, gridTemplate, style = {} },
