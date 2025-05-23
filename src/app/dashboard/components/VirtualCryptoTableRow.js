@@ -1,47 +1,82 @@
 'use client';
-import roundToThousandths from '@/lib/roundToThousandths';
+
+import { forwardRef, memo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import {memo, useCallback} from 'react'
-function CryptoTableRow({ coin }) {
+import roundToThousandths from '@/lib/roundToThousandths';
+
+/**
+ * Одна строка таблицы-грида.
+ *
+ * @param {object}   props
+ * @param {Coin}     props.coin             объект монеты
+ * @param {string}   props.gridTemplate     значение grid-шаблона колонок
+ * @param {object}   [props.style]          inline-стили от виртуализатора
+ */
+const VirtualCryptoTableRow = forwardRef(function VirtualCryptoTableRow(
+    { coin, gridTemplate, style = {} },
+    ref,
+) {
     const router = useRouter();
-    let priceChangeColor;
-    if (coin.price_change_24h > 0) priceChangeColor = 'text-green-500';
-    else if (!coin.price_change_24h) priceChangeColor = `text-white-500`;
-    else priceChangeColor = `text-red-500`;
-    const clickHandler = useCallback( (e) => {
+
+    const priceChangeColor =
+        coin.price_change_24h > 0
+            ? 'text-green-500'
+            : coin.price_change_24h === 0
+                ? 'text-white'
+                : 'text-red-500';
+
+    const clickHandler = useCallback(() => {
         const params = new URLSearchParams({
             id: coin.id,
             name: coin.name,
             symbol: coin.symbol,
         });
-        router.push(`/dashboard/coin?${params}`);
-    }, [coin]);
+        router.push(`/dashboard/coin?${params.toString()}`);
+    }, [coin, router]);
+
     return (
-        <div className="flex flex-row space-between" onClick={clickHandler}>
-            <div>
-                <div className='avatar'>
-                    <div className='mask mask-squircle h-12 w-12'>
+        <div
+            ref={ref}
+            onClick={clickHandler}
+            style={{ ...style, display: 'grid', gridTemplateColumns: gridTemplate }}
+            className="items-center px-2 py-3 cursor-pointer hover:bg-base-200"
+        >
+            {/* Icon */}
+            <div className="flex items-center">
+                <div className="avatar">
+                    <div className="mask mask-squircle h-12 w-12">
                         <img src={coin.image} alt={`${coin.symbol} icon`} />
                     </div>
                 </div>
             </div>
-            <div>
-                <span className='font-bold'>{coin.symbol.toUpperCase()}</span>
+
+            {/* Tag */}
+            <div className="font-bold">{coin.symbol.toUpperCase()}</div>
+
+            {/* Name */}
+            <div className="truncate">{coin.name}</div>
+
+            {/* Market Cap */}
+            <div className="text-right">
+                {Number(coin.market_cap).toLocaleString()}
             </div>
-            <div>{coin.name}</div>
-            <div>{coin.market_cap}</div>
-            <div>{coin.current_price}</div>
-            <div className={priceChangeColor}>
-                {roundToThousandths(coin.price_change_24h ? coin.price_change_24h : 0)}
+
+            {/* Price */}
+            <div className="text-right">
+                {roundToThousandths(coin.current_price)}
             </div>
-            <div className={priceChangeColor}>
-                {coin.price_change_percentage_24h
-                    ? coin.price_change_percentage_24h
-                    : 0}
-                %
+
+            {/* 24 h */}
+            <div className={`text-right ${priceChangeColor}`}>
+                {roundToThousandths(coin.price_change_24h || 0)}
+            </div>
+
+            {/* 24 h % */}
+            <div className={`text-right ${priceChangeColor}`}>
+                {roundToThousandths(coin.price_change_percentage_24h || 0)}%
             </div>
         </div>
     );
-}
+});
 
-export default memo(CryptoTableRow);
+export default memo(VirtualCryptoTableRow);
